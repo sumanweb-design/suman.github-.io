@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact - Suman</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{
+  background:#050505;
+  color:white;
+  overflow:hidden;
+}
+
+/* PARTICLES */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+/* CONTAINER */
+.container{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  padding:20px;
+}
+
+/* TITLE */
+h1{
+  font-size:2.5rem;
+  margin-bottom:30px;
+  background:linear-gradient(90deg,#ff0000,#0066ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* CARDS */
+.cards{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+/* GLASS CARD */
+.card{
+  width:220px;
+  padding:25px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(15px);
+  border:1px solid rgba(255,255,255,0.1);
+  transition:0.3s;
+  cursor:pointer;
+}
+
+.card:hover{
+  transform:translateY(-10px) scale(1.05);
+  box-shadow:0 10px 30px rgba(0,0,0,0.7);
+}
+
+/* BUTTON */
+.btn{
+  margin-top:15px;
+  padding:8px 18px;
+  border-radius:20px;
+  border:none;
+  background:linear-gradient(90deg,#ff0000,#0066ff);
+  color:white;
+  cursor:pointer;
+}
+
+/* BACK */
+.back{
+  margin-top:40px;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+  <h1>Contact Me</h1>
+
+  <div class="cards">
+
+    <!-- EMAIL -->
+    <div class="card">
+      <h3>kundusuman7232@gmail.com</h3>
+      <p>Click to copy</p>
+      <button class="btn" onclick="copyEmail()">Copy</button>
+    </div>
+
+    <!-- WHATSAPP -->
+    <div class="card" onclick="openLink('https://wa.me/91XXXXXXXXXX')">
+      <h3>WhatsApp</h3>
+      <p>Chat with me</p>
+    </div>
+
+    <!-- DISCORD -->
+    <div class="card" onclick="openLink('https://discord.com/users/vortexyrn_playz')">
+      <h3>Discord</h3>
+      <p>Connect with me</p>
+    </div>
+
+  </div>
+
+  <button class="btn back" onclick="goHome()">Back</button>
+</div>
+
+<script>
+
+// COPY EMAIL
+function copyEmail(){
+  const email = "your@email.com"; // change this
+  navigator.clipboard.writeText(email);
+  alert("Email copied!");
+}
+
+// LINKS
+function openLink(url){
+  window.open(url,'_blank');
+}
+
+// NAV
+function goHome(){
+  window.location.href = "home.html";
+}
+
+// PARTICLES
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<100;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    size:Math.random()*2,
+    speedX:Math.random()-0.5,
+    speedY:Math.random()-0.5
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.x+=p.speedX;
+    p.y+=p.speedY;
+    ctx.fillStyle="rgba(255,255,255,0.5)";
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fill();
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+</script>
+
+</body>
+</html>

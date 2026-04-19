@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About - Suman</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  background:#050505;
+  color:white;
+  overflow:hidden;
+  transition:0.5s;
+}
+
+/* FADE */
+.fade-out{
+  opacity:0;
+}
+
+/* PARTICLES */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+/* CONTAINER */
+.container{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  padding:20px;
+}
+
+/* TITLE */
+h1{
+  font-size:3rem;
+  margin-bottom:15px;
+  background:linear-gradient(90deg,#ff0000,#0066ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* TEXT */
+p{
+  max-width:500px;
+  opacity:0.8;
+  line-height:1.6;
+}
+
+/* GLASS BUTTON */
+button{
+  margin-top:25px;
+  padding:12px 25px;
+  border-radius:25px;
+  border:1px solid rgba(255,255,255,0.2);
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(12px);
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:translateY(-3px) scale(1.05);
+  background:rgba(255,255,255,0.15);
+  box-shadow:0 8px 25px rgba(0,0,0,0.5);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  h1{font-size:2rem;}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+  <h1>About Me</h1>
+  <p id="text"></p>
+
+  <button onclick="goHome()">Back to Home</button>
+</div>
+
+<script>
+
+// PAGE TRANSITION
+function goHome(){
+  document.body.classList.add("fade-out");
+  setTimeout(()=>{
+    window.location.href = "home.html";
+  },400);
+}
+
+// TEXT REVEAL
+const text = "Hi, I'm Suman. I build modern, smooth and animated websites. I focus on clean design, performance and creating professional user experiences.";
+let i = 0;
+
+function type(){
+  if(i < text.length){
+    document.getElementById("text").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(type, 25);
+  }
+}
+type();
+
+// PARTICLES
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for(let i=0;i<100;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    size:Math.random()*2,
+    speedX:Math.random()-0.5,
+    speedY:Math.random()-0.5
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  particles.forEach(p=>{
+    p.x+=p.speedX;
+    p.y+=p.speedY;
+
+    ctx.fillStyle="rgba(255,255,255,0.5)";
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fill();
+
+    if(p.x<0||p.x>canvas.width) p.speedX*=-1;
+    if(p.y<0||p.y>canvas.height) p.speedY*=-1;
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+</script>
+
+</body>
+</html>

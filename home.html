@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suman</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  background:#050505;
+  color:white;
+  overflow-x:hidden;
+  transition:0.5s;
+}
+
+/* FADE TRANSITION */
+.fade-out{
+  opacity:0;
+}
+
+/* NAVBAR */
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 25px;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(10px);
+  z-index:1000;
+}
+
+.logo{
+  font-weight:600;
+}
+
+/* MENU */
+.menu{
+  display:flex;
+  gap:20px;
+}
+
+.menu a{
+  cursor:pointer;
+}
+
+.menu a:hover{
+  color:#00c3ff;
+}
+
+/* HAMBURGER */
+.hamburger{
+  display:none;
+  flex-direction:column;
+  cursor:pointer;
+}
+
+.hamburger span{
+  width:25px;
+  height:3px;
+  background:white;
+  margin:4px;
+}
+
+/* MOBILE MENU */
+.mobile-menu{
+  position:fixed;
+  top:60px;
+  right:0;
+  width:200px;
+  background:#111;
+  display:none;
+  flex-direction:column;
+  padding:20px;
+}
+
+/* HERO */
+.hero{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  padding:20px;
+}
+
+.hero h1{
+  font-size:3.5rem;
+  background:linear-gradient(90deg,#ff0000,#0066ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+  margin-top:10px;
+  opacity:0.7;
+}
+
+/* BUTTONS */
+.buttons{
+  margin-top:30px;
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+button{
+  padding:12px 25px;
+  border-radius:25px;
+  border:1px solid rgba(255,255,255,0.2);
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(12px);
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+/* HOVER EFFECT */
+button:hover{
+  transform:translateY(-3px) scale(1.05);
+  background:rgba(255,255,255,0.15);
+  box-shadow:0 8px 25px rgba(0,0,0,0.5);
+}
+
+/* CLICK EFFECT */
+button:active{
+  transform:scale(0.95);
+}
+
+button:hover{
+  transform:scale(1.1);
+}
+
+/* PARTICLES */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .menu{display:none;}
+  .hamburger{display:flex;}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">SUMAN</div>
+
+  <div class="menu">
+    <a onclick="go('about.html')">About</a>
+    <a onclick="go('projects.html')">Projects</a>
+    <a onclick="go('contact.html')">Contact</a>
+  </div>
+
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="go('about.html')">About</a>
+  <a onclick="go('projects.html')">Projects</a>
+  <a onclick="go('contact.html')">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>SUMAN</h1>
+  <p>Welcome to my website</p>
+
+  <div class="buttons">
+    <button onclick="go('about.html')">About Me</button>
+    <button onclick="go('projects.html')">Projects</button>
+    <button onclick="go('contact.html')">Contact</button>
+  </div>
+</section>
+
+<script>
+
+// PAGE TRANSITION
+function go(page){
+  document.body.classList.add("fade-out");
+  setTimeout(()=>{
+    window.location.href = page;
+  },400);
+}
+
+// MOBILE MENU
+function toggleMenu(){
+  const menu = document.getElementById("mobileMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+// PARTICLES
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for(let i=0;i<100;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    size:Math.random()*2,
+    speedX:Math.random()-0.5,
+    speedY:Math.random()-0.5
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  particles.forEach(p=>{
+    p.x+=p.speedX;
+    p.y+=p.speedY;
+
+    ctx.fillStyle="rgba(255,255,255,0.5)";
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fill();
+
+    if(p.x<0||p.x>canvas.width) p.speedX*=-1;
+    if(p.y<0||p.y>canvas.height) p.speedY*=-1;
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+</script>
+
+</body>
+</html>
