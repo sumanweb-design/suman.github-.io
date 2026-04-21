@@ -16,13 +16,14 @@
 }
 
 body{
+  background:#050505;
+  color:white;
   height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  background:#050505;
-  color:white;
   overflow:hidden;
+  transition:0.5s;
 }
 
 /* PARTICLES */
@@ -36,63 +37,42 @@ canvas{
 /* CONTAINER */
 .container{
   text-align:center;
-  padding:20px;
+}
+
+/* TITLE */
+h1{
+  font-size:3rem;
+  letter-spacing:4px;
+  background:linear-gradient(90deg,#ff0000,#7a00ff,#0066ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:15px;
 }
 
 /* TYPING TEXT */
-h1{
-  font-size:3rem;
+.typing{
+  font-size:18px;
+  opacity:0.8;
+  height:25px;
+  margin-bottom:40px;
 }
 
-.cursor{
-  display:inline-block;
-  width:2px;
-  height:30px;
-  background:white;
-  margin-left:5px;
-  animation:blink 0.7s infinite;
-}
-
-@keyframes blink{
-  50%{opacity:0;}
-}
-
-/* BUTTON */
-button{
-  margin-top:30px;
-  padding:14px 35px;
+/* ENTER BUTTON */
+.enter-btn{
+  padding:15px 40px;
+  border-radius:50px;
   border:none;
-  border-radius:30px;
-  background:linear-gradient(90deg,#ff0000,#0066ff);
+  font-size:16px;
   color:white;
   cursor:pointer;
+
+  background:linear-gradient(90deg,#ff0000,#7a00ff,#0066ff);
   transition:0.3s;
 }
 
-button:hover{
+.enter-btn:hover{
   transform:scale(1.1);
-}
-
-/* LOADING BAR */
-.loader{
-  width:200px;
-  height:4px;
-  background:#222;
-  margin:20px auto;
-  overflow:hidden;
-  border-radius:10px;
-  display:none;
-}
-
-.loader-bar{
-  width:0%;
-  height:100%;
-  background:linear-gradient(90deg,#ff0000,#0066ff);
-}
-
-/* MOBILE */
-@media(max-width:768px){
-  h1{font-size:2rem;}
+  box-shadow:0 0 25px rgba(0,102,255,0.6);
 }
 </style>
 </head>
@@ -102,61 +82,59 @@ button:hover{
 <canvas id="particles"></canvas>
 
 <div class="container">
-  <h1 id="text"></h1><span class="cursor"></span>
-  <div class="loader" id="loader">
-    <div class="loader-bar" id="bar"></div>
-  </div>
-  <button onclick="enter()">Enter</button>
-</div>
+  <h1>SUMAN</h1>
+  <div class="typing" id="typing"></div>
 
-<!-- SOUND -->
-<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-29.mp3"></audio>
+  <button class="enter-btn" onclick="enterSite()">Enter</button>
+</div>
 
 <script>
 
 // TYPING EFFECT
-const text = "Welcome to my web";
-let i = 0;
+const text = ["Web Developer", "Minecraft Server Manager", "Thumbnail Designer"];
+let i=0, j=0;
+let currentText="";
+let isDeleting=false;
+
 function type(){
   if(i < text.length){
-    document.getElementById("text").innerHTML += text.charAt(i);
-    i++;
-    setTimeout(type, 60);
+    if(!isDeleting && j <= text[i].length){
+      currentText = text[i].substring(0,j++);
+    }else if(isDeleting && j >= 0){
+      currentText = text[i].substring(0,j--);
+    }
+
+    document.getElementById("typing").innerText = currentText;
+
+    if(j === text[i].length) isDeleting = true;
+    if(j === 0){
+      isDeleting = false;
+      i++;
+    }
+  }else{
+    i=0;
   }
+
+  setTimeout(type,100);
 }
 type();
 
 // ENTER FUNCTION
-function enter(){
-  document.getElementById("clickSound").play();
-
-  const loader = document.getElementById("loader");
-  const bar = document.getElementById("bar");
-
-  loader.style.display = "block";
-
-  let width = 0;
-  const interval = setInterval(()=>{
-    width += 2;
-    bar.style.width = width + "%";
-
-    if(width >= 100){
-      clearInterval(interval);
-      window.location.href = "home.html";
-    }
-  }, 30);
+function enterSite(){
+  document.body.style.opacity = "0";
+  setTimeout(()=>{
+    window.location.href="home.html";
+  },500);
 }
 
 // PARTICLES
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-
-for(let i=0;i<100;i++){
+let particles=[];
+for(let i=0;i<120;i++){
   particles.push({
     x:Math.random()*canvas.width,
     y:Math.random()*canvas.height,
@@ -168,18 +146,14 @@ for(let i=0;i<100;i++){
 
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-
   particles.forEach(p=>{
-    p.x += p.speedX;
-    p.y += p.speedY;
+    p.x+=p.speedX;
+    p.y+=p.speedY;
 
-    ctx.fillStyle = "rgba(255,255,255,0.5)";
+    ctx.fillStyle="white";
     ctx.beginPath();
     ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
     ctx.fill();
-
-    if(p.x<0||p.x>canvas.width) p.speedX*=-1;
-    if(p.y<0||p.y>canvas.height) p.speedY*=-1;
   });
 
   requestAnimationFrame(animate);
