@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Homepage — highest priority -->
+  <url>
+    <loc>https://sumanverse.com/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://sumanverse.com/assets/logo.jpg</image:loc>
+      <image:title>Suman Verse — Frontend Developer | Code. Design. Inspire.</image:title>
+      <image:caption>Suman Verse logo — Code. Design. Inspire.</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Works / Portfolio -->
+  <url>
+    <loc>https://sumanverse.com/works.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://sumanverse.com/assets/project_nebula.png</image:loc>
+      <image:title>Nebula Dashboard — cloud infrastructure controller</image:title>
+      <image:caption>Nebula Dashboard project by Suman Verse</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sumanverse.com/assets/project_nova.png</image:loc>
+      <image:title>Nova Chat — real-time messaging client</image:title>
+      <image:caption>Nova Chat project by Suman Verse</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sumanverse.com/assets/project_quantum.png</image:loc>
+      <image:title>Quantum Player — spatial audio interface</image:title>
+      <image:caption>Quantum Player project by Suman Verse</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://sumanverse.com/contact.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://sumanverse.com/assets/logo.jpg</image:loc>
+      <image:title>Contact Suman Verse — hire frontend developer</image:title>
+      <image:caption>Get in touch with Suman Verse</image:caption>
+    </image:image>
+  </url>
+
+</urlset>

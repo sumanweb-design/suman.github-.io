@@ -1,0 +1,48 @@
+{
+  "name": "Suman Verse — Frontend Developer",
+  "short_name": "Suman Verse",
+  "description": "Frontend developer crafting precise, high-performance web experiences. Code. Design. Inspire.",
+  "lang": "en-US",
+  "start_url": "/",
+  "scope": "/",
+  "id": "sumanverse-portfolio",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "categories": ["portfolio", "developer", "design"],
+  "icons": [
+    {
+      "src": "assets/logo.jpg",
+      "type": "image/jpeg",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/logo.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/project_nebula.png",
+      "type": "image/png",
+      "sizes": "1280x720",
+      "label": "Nebula Dashboard — Suman Verse"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "View Works",
+      "url": "/works.html",
+      "description": "Browse selected frontend projects"
+    },
+    {
+      "name": "Get in Touch",
+      "url": "/contact.html",
+      "description": "Contact Suman for freelance work"
+    }
+  ]
+}

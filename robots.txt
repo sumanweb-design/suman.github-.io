@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /*.md$
+Crawl-delay: 10
+
+User-agent: Googlebot
+Allow: /
+Disallow:
+
+User-agent: Bingbot
+Allow: /
+Disallow:
+
+Sitemap: https://sumanverse.com/sitemap.xml
