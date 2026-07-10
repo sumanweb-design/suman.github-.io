@@ -27,6 +27,18 @@
   ],
   "screenshots": [
     {
+      "src": "assets/aeroforce_1.png",
+      "type": "image/png",
+      "sizes": "1280x720",
+      "label": "Aero Force Storefront — Suman Verse"
+    },
+    {
+      "src": "assets/sharpness_3.jpg",
+      "type": "image/jpeg",
+      "sizes": "1280x720",
+      "label": "Sharpness Sword Store — Suman Verse"
+    },
+    {
       "src": "assets/project_nebula.png",
       "type": "image/png",
       "sizes": "1280x720",

@@ -1,7 +1,13 @@
+# ═══════════════════════════════════════════════════════════
+# SUMAN VERSE — robots.txt
+# Optimised for: Traditional SEO + LLMO + GEO + AI Crawlers
+# ═══════════════════════════════════════════════════════════
+
+# ─── Standard Search Engines ───────────────────────────────
 User-agent: *
 Allow: /
+Crawl-delay: 5
 Disallow: /*.md$
-Crawl-delay: 10
 
 User-agent: Googlebot
 Allow: /
@@ -11,4 +17,61 @@ User-agent: Bingbot
 Allow: /
 Disallow:
 
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# ─── Generative AI / LLM Crawlers (LLMO & AEO) ─────────────
+# ChatGPT / OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic / Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Google AI (Bard / Gemini / AI Overviews)
+User-agent: Google-Extended
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Meta AI (Llama)
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+
+# ByteDance / TikTok AI
+User-agent: Bytespider
+Allow: /
+
+# You.com AI
+User-agent: YouBot
+Allow: /
+
+# Microsoft Copilot
+User-agent: bingbot
+Allow: /
+
+# Amazon / Alexa AI
+User-agent: Amazonbot
+Allow: /
+
+# ─── Sitemap ────────────────────────────────────────────────
 Sitemap: https://sumanverse.com/sitemap.xml
