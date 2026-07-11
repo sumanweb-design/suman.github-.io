@@ -993,9 +993,9 @@ section { padding: var(--space-xl) 0; }
 /* Centered contact cards layout */
 .contact-cards-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
-  max-width: 860px;
+  max-width: 1100px;
   margin: 4rem auto 0 auto;
 }
 

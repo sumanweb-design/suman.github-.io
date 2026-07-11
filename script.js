@@ -72,8 +72,9 @@ function initScrollReveal() {
    4. CONTACT ACTIONS
    ============================================================ */
 function initContactActions() {
-  var emailCard   = document.getElementById('email-card');
-  var discordCard = document.getElementById('discord-card');
+  var emailCard    = document.getElementById('email-card');
+  var discordCard  = document.getElementById('discord-card');
+  var whatsappCard = document.getElementById('whatsapp-card');
 
   if (emailCard) {
     function handleEmail() {
@@ -101,6 +102,22 @@ function initContactActions() {
     discordCard.addEventListener('click', handleDiscord);
     discordCard.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') handleDiscord();
+    });
+  }
+
+  if (whatsappCard) {
+    function handleWhatsApp() {
+      var msg = 'Hi Suman! I reached out through your Suman Verse portfolio and would love to chat about a project.';
+      var encodedMsg = encodeURIComponent(msg);
+      var url = 'https://wa.me/639078989078?text=' + encodedMsg;
+      showToast('Opening WhatsApp…');
+      setTimeout(function () {
+        window.open(url, '_blank');
+      }, 800);
+    }
+    whatsappCard.addEventListener('click', handleWhatsApp);
+    whatsappCard.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') handleWhatsApp();
     });
   }
 }
