@@ -30,31 +30,38 @@
       "src": "assets/aeroforce_1.png",
       "type": "image/png",
       "sizes": "1280x720",
-      "label": "Aero Force Storefront — Suman Verse"
+      "label": "Aero Force Storefront — Suman Verse",
+      "form_factor": "wide"
     },
     {
       "src": "assets/sharpness_3.jpg",
       "type": "image/jpeg",
       "sizes": "1280x720",
-      "label": "Sharpness Sword Store — Suman Verse"
+      "label": "Sharpness Sword Store — Suman Verse",
+      "form_factor": "wide"
     },
     {
       "src": "assets/project_nebula.png",
       "type": "image/png",
       "sizes": "1280x720",
-      "label": "Nebula Dashboard — Suman Verse"
+      "label": "Nebula Dashboard — Suman Verse",
+      "form_factor": "wide"
     }
   ],
   "shortcuts": [
     {
       "name": "View Works",
+      "short_name": "Works",
       "url": "/works.html",
       "description": "Browse selected frontend projects"
     },
     {
       "name": "Get in Touch",
+      "short_name": "Contact",
       "url": "/contact.html",
       "description": "Contact Suman for freelance work"
     }
-  ]
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

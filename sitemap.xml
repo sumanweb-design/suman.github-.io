@@ -1,53 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <!-- Homepage — highest priority -->
   <url>
     <loc>https://sumanverse.com/</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://sumanverse.com/assets/logo.jpg</image:loc>
-      <image:title>Suman Verse — Frontend Developer | Code. Design. Inspire.</image:title>
-      <image:caption>Suman Verse logo — Code. Design. Inspire.</image:caption>
+      <image:title>Suman Verse — Frontend Developer</image:title>
+      <image:caption>Suman Verse portfolio logo</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sumanverse.com/assets/aeroforce_1.png</image:loc>
+      <image:title>Aero Force Storefront — by Suman Verse</image:title>
+      <image:caption>Featured project: Aero Force Minecraft Storefront</image:caption>
     </image:image>
   </url>
 
-  <!-- Works / Portfolio -->
   <url>
     <loc>https://sumanverse.com/works.html</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
+      <image:loc>https://sumanverse.com/assets/wardex_1.png</image:loc>
+      <image:title>Wardex Studio — YouTube thumbnail editor by Suman Verse</image:title>
+      <image:caption>Wardex Studio project</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sumanverse.com/assets/bluebz_1.jpg</image:loc>
+      <image:title>Bluebz Studio — floral resin art portfolio by Suman Verse</image:title>
+      <image:caption>Bluebz Studio project</image:caption>
+    </image:image>
+    <image:image>
       <image:loc>https://sumanverse.com/assets/aeroforce_1.png</image:loc>
-      <image:title>Aero Force Storefront — custom Minecraft server web store by Suman Verse</image:title>
-      <image:caption>Aero Force Storefront project by Suman Verse</image:caption>
+      <image:title>Aero Force Storefront — Minecraft server web store by Suman Verse</image:title>
+      <image:caption>Aero Force Storefront project</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://sumanverse.com/assets/sharpness_3.jpg</image:loc>
-      <image:title>Sharpness Sword Store — premium Minecraft e-commerce store by Suman Verse</image:title>
-      <image:caption>Sharpness Sword Store project by Suman Verse</image:caption>
+      <image:title>Sharpness Sword Store — premium Minecraft e-commerce by Suman Verse</image:title>
+      <image:caption>Sharpness Sword Store project</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://sumanverse.com/assets/project_nebula.png</image:loc>
-      <image:title>Nebula Dashboard — cloud infrastructure controller by Suman Verse</image:title>
-      <image:caption>Nebula Dashboard project by Suman Verse</image:caption>
+      <image:title>Nebula Dashboard — cloud infrastructure UI by Suman Verse</image:title>
+      <image:caption>Nebula Dashboard project</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://sumanverse.com/assets/project_nova.png</image:loc>
       <image:title>Nova Chat — real-time messaging client by Suman Verse</image:title>
-      <image:caption>Nova Chat project by Suman Verse</image:caption>
+      <image:caption>Nova Chat project</image:caption>
     </image:image>
   </url>
 
-  <!-- Contact -->
   <url>
     <loc>https://sumanverse.com/contact.html</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>yearly</changefreq>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://sumanverse.com/assets/logo.jpg</image:loc>

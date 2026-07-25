@@ -1,11 +1,4 @@
-/* ============================================================
-   SUMAN VERSE — main script
-   Pure vanilla JavaScript. No frameworks, no Node.js.
-   Scroll progress · Counter animation · Staggered reveals
-   Hero parallax · Lightbox gallery · Video player
-   ============================================================ */
-
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initScrollReveal();
   initContactActions();
@@ -15,25 +8,21 @@ document.addEventListener('DOMContentLoaded', function () {
   initHeroParallax();
 });
 
-
-
-/* ============================================================
-   2. NAVIGATION
-   ============================================================ */
+// Navigation toggle & mobile menu
 function initNav() {
-  var toggle = document.querySelector('.menu-toggle');
-  var menu   = document.querySelector('.nav-menu');
+  const toggle = document.querySelector('.menu-toggle');
+  const menu = document.querySelector('.nav-menu');
   if (!toggle || !menu) return;
 
-  toggle.addEventListener('click', function () {
-    var isOpen = menu.classList.toggle('open');
+  toggle.addEventListener('click', () => {
+    const isOpen = menu.classList.toggle('open');
     toggle.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
-  menu.querySelectorAll('a').forEach(function (a) {
-    a.addEventListener('click', function () {
+  menu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
       menu.classList.remove('open');
       toggle.classList.remove('open');
       toggle.setAttribute('aria-expanded', 'false');
@@ -42,147 +31,159 @@ function initNav() {
   });
 }
 
-/* ============================================================
-   3. SCROLL REVEAL (staggered)
-   ============================================================ */
+// Scroll reveal animations
 function initScrollReveal() {
-  var els = document.querySelectorAll('.fade-in');
-  if (!els.length) return;
+  const elements = document.querySelectorAll('.fade-in');
+  if (!elements.length) return;
 
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        io.unobserve(e.target);
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.10 });
+  }, { threshold: 0.1 });
 
-  els.forEach(function (el) { io.observe(el); });
+  elements.forEach(el => observer.observe(el));
 
-  /* Stagger children inside grid containers */
-  document.querySelectorAll('.gallery-grid, .values-list, .contact-cards-layout').forEach(function (grid) {
-    Array.from(grid.children).forEach(function (child, i) {
-      child.style.transitionDelay = (i * 0.09) + 's';
+  document.querySelectorAll('.gallery-grid, .values-list, .contact-cards-layout').forEach(grid => {
+    Array.from(grid.children).forEach((child, index) => {
+      child.style.transitionDelay = `${index * 0.09}s`;
     });
   });
 }
 
-/* ============================================================
-   4. CONTACT ACTIONS
-   ============================================================ */
+// Contact card interactions & clipboard actions
 function initContactActions() {
-  var emailCard    = document.getElementById('email-card');
-  var discordCard  = document.getElementById('discord-card');
-  var whatsappCard = document.getElementById('whatsapp-card');
+  const emailCard = document.getElementById('email-card');
+  const discordCard = document.getElementById('discord-card');
+  const whatsappCard = document.getElementById('whatsapp-card');
 
   if (emailCard) {
-    function handleEmail() {
+    const handleEmail = () => {
       navigator.clipboard.writeText('sumanverse95@gmail.com')
-        .then(function () { showToast('Email copied to clipboard'); })
-        .catch(function () {});
-      setTimeout(function () { window.open('mailto:sumanverse95@gmail.com', '_self'); }, 800);
-    }
+        .then(() => showToast('Email copied to clipboard'))
+        .catch(() => {});
+      setTimeout(() => window.open('mailto:sumanverse95@gmail.com', '_self'), 800);
+    };
     emailCard.addEventListener('click', handleEmail);
-    emailCard.addEventListener('keydown', function (e) {
+    emailCard.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') handleEmail();
     });
   }
 
   if (discordCard) {
-    function handleDiscord() {
-      var msg = 'Hi Suman! I reached out through your Suman Verse portfolio and would love to get in touch about a project.';
+    const handleDiscord = () => {
+      const msg = 'Hi Suman! I reached out through your Suman Verse portfolio and would love to get in touch about a project.';
       navigator.clipboard.writeText(msg)
-        .then(function () { showToast('Opening Discord… Starter message copied!'); })
-        .catch(function () { showToast('Opening Discord…'); });
-      setTimeout(function () {
+        .then(() => showToast('Opening Discord… Starter message copied!'))
+        .catch(() => showToast('Opening Discord…'));
+      setTimeout(() => {
         window.open('https://discord.com/users/1130046717878878272', '_blank');
       }, 1000);
-    }
+    };
     discordCard.addEventListener('click', handleDiscord);
-    discordCard.addEventListener('keydown', function (e) {
+    discordCard.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') handleDiscord();
     });
   }
 
   if (whatsappCard) {
-    function handleWhatsApp() {
-      var msg = 'Hi Suman! I reached out through your Suman Verse portfolio and would love to chat about a project.';
-      var encodedMsg = encodeURIComponent(msg);
-      var url = 'https://wa.me/639078989078?text=' + encodedMsg;
+    const handleWhatsApp = () => {
+      const msg = 'Hi Suman! I reached out through your Suman Verse portfolio and would love to chat about a project.';
+      const url = `https://wa.me/639078989078?text=${encodeURIComponent(msg)}`;
       showToast('Opening WhatsApp…');
-      setTimeout(function () {
-        window.open(url, '_blank');
-      }, 800);
-    }
+      setTimeout(() => window.open(url, '_blank'), 800);
+    };
     whatsappCard.addEventListener('click', handleWhatsApp);
-    whatsappCard.addEventListener('keydown', function (e) {
+    whatsappCard.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') handleWhatsApp();
     });
   }
 }
 
 function showToast(message) {
-  document.querySelectorAll('.toast').forEach(function (t) { t.remove(); });
-  var toast = document.createElement('div');
-  toast.className   = 'toast';
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const toast = document.createElement('div');
+  toast.className = 'toast';
   toast.textContent = message;
   document.body.appendChild(toast);
-  requestAnimationFrame(function () {
-    requestAnimationFrame(function () { toast.classList.add('show'); });
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => toast.classList.add('show'));
   });
-  setTimeout(function () {
+
+  setTimeout(() => {
     toast.classList.remove('show');
-    setTimeout(function () { toast.remove(); }, 400);
+    setTimeout(() => toast.remove(), 400);
   }, 3200);
 }
 
-/* ============================================================
-   5. LIGHTBOX
-   ============================================================ */
+// Lightbox modal for projects and videos
 function initLightbox() {
-  var lb = document.getElementById('lightbox');
-  if (!lb) {
-    lb = document.createElement('div');
-    lb.id = 'lightbox';
-    lb.className = 'lightbox';
-    lb.setAttribute('role', 'dialog');
-    lb.setAttribute('aria-modal', 'true');
-    lb.setAttribute('aria-label', 'Media viewer');
-    lb.innerHTML =
-      '<div class="lightbox-inner">' +
-        '<button class="lightbox-close" aria-label="Close viewer">&times;</button>' +
-        '<button class="lightbox-nav-btn prev" aria-label="Previous image">&lt;</button>' +
-        '<div id="lb-media"></div>' +
-        '<button class="lightbox-nav-btn next" aria-label="Next image">&gt;</button>' +
-        '<div class="lightbox-caption">' +
-          '<h3 id="lb-title"></h3>' +
-          '<p  id="lb-desc"></p>' +
-          '<div id="lb-counter" class="lightbox-counter"></div>' +
-        '</div>' +
-      '</div>';
-    document.body.appendChild(lb);
+  let lightbox = document.getElementById('lightbox');
+  if (!lightbox) {
+    lightbox = document.createElement('div');
+    lightbox.id = 'lightbox';
+    lightbox.className = 'lightbox';
+    lightbox.setAttribute('role', 'dialog');
+    lightbox.setAttribute('aria-modal', 'true');
+    lightbox.setAttribute('aria-label', 'Media viewer');
+    lightbox.innerHTML = `
+      <div class="lightbox-inner">
+        <button class="lightbox-close" aria-label="Close viewer">&times;</button>
+        <button class="lightbox-nav-btn prev" aria-label="Previous image">&lt;</button>
+        <div id="lb-media"></div>
+        <button class="lightbox-nav-btn next" aria-label="Next image">&gt;</button>
+        <div class="lightbox-caption">
+          <h3 id="lb-title"></h3>
+          <p id="lb-desc"></p>
+          <div id="lb-counter" class="lightbox-counter"></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(lightbox);
   }
 
-  var lbMedia = lb.querySelector('#lb-media');
-  var lbTitle = lb.querySelector('#lb-title');
-  var lbDesc  = lb.querySelector('#lb-desc');
-  var lbClose = lb.querySelector('.lightbox-close');
-  var btnPrev = lb.querySelector('.lightbox-nav-btn.prev');
-  var btnNext = lb.querySelector('.lightbox-nav-btn.next');
-  var lbCount = lb.querySelector('#lb-counter');
+  const lbMedia = lightbox.querySelector('#lb-media');
+  const lbTitle = lightbox.querySelector('#lb-title');
+  const lbDesc = lightbox.querySelector('#lb-desc');
+  const lbClose = lightbox.querySelector('.lightbox-close');
+  const btnPrev = lightbox.querySelector('.lightbox-nav-btn.prev');
+  const btnNext = lightbox.querySelector('.lightbox-nav-btn.next');
+  const lbCount = lightbox.querySelector('#lb-counter');
 
-  var galleryImages = [];
-  var activeIndex = 0;
+  let galleryImages = [];
+  let activeIndex = 0;
 
-  function openLB(html, title, desc, images, index) {
-    lbMedia.innerHTML     = html;
-    lbTitle.textContent   = title;
-    lbDesc.textContent    = desc;
-    
+  const updateGalleryImage = () => {
+    if (!galleryImages.length) return;
+    const src = galleryImages[activeIndex];
+    lbMedia.innerHTML = `<img src="${src}" alt="${lbTitle.textContent} image ${activeIndex + 1}" class="lightbox-img">`;
+    lbCount.textContent = `${activeIndex + 1} / ${galleryImages.length}`;
+  };
+
+  const nextImage = () => {
+    if (!galleryImages.length) return;
+    activeIndex = (activeIndex + 1) % galleryImages.length;
+    updateGalleryImage();
+  };
+
+  const prevImage = () => {
+    if (!galleryImages.length) return;
+    activeIndex = (activeIndex - 1 + galleryImages.length) % galleryImages.length;
+    updateGalleryImage();
+  };
+
+  const openLightbox = (html, title, desc, images, index = 0) => {
+    lbMedia.innerHTML = html;
+    lbTitle.textContent = title;
+    lbDesc.textContent = desc;
+
     if (images && images.length > 1) {
       galleryImages = images;
-      activeIndex = index || 0;
+      activeIndex = index;
       btnPrev.style.display = 'flex';
       btnNext.style.display = 'flex';
       updateGalleryImage();
@@ -193,150 +194,125 @@ function initLightbox() {
       lbCount.textContent = '';
     }
 
-    lb.classList.add('open');
+    lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
     lbClose.focus();
-  }
+  };
 
-  function updateGalleryImage() {
-    if (galleryImages.length === 0) return;
-    var src = galleryImages[activeIndex];
-    lbMedia.innerHTML = '<img src="' + src + '" alt="' + lbTitle.textContent + ' image ' + (activeIndex + 1) + '" class="lightbox-img">';
-    lbCount.textContent = (activeIndex + 1) + ' / ' + galleryImages.length;
-  }
-
-  function nextImage() {
-    if (galleryImages.length === 0) return;
-    activeIndex = (activeIndex + 1) % galleryImages.length;
-    updateGalleryImage();
-  }
-
-  function prevImage() {
-    if (galleryImages.length === 0) return;
-    activeIndex = (activeIndex - 1 + galleryImages.length) % galleryImages.length;
-    updateGalleryImage();
-  }
-
-  function closeLB() {
-    lb.classList.remove('open');
+  const closeLightbox = () => {
+    lightbox.classList.remove('open');
     document.body.style.overflow = '';
-    var v = lbMedia.querySelector('video, iframe');
-    if (v) v.src = '';
+    const mediaItem = lbMedia.querySelector('video, iframe');
+    if (mediaItem) mediaItem.src = '';
     lbMedia.innerHTML = '';
     galleryImages = [];
-  }
+  };
 
-  lbClose.addEventListener('click', closeLB);
-  btnPrev.addEventListener('click', function(e) { e.stopPropagation(); prevImage(); });
-  btnNext.addEventListener('click', function(e) { e.stopPropagation(); nextImage(); });
-  lb.addEventListener('click', function (e) { if (e.target === lb) closeLB(); });
-  
-  document.addEventListener('keydown', function (e) {
-    if (!lb.classList.contains('open')) return;
-    if (e.key === 'Escape') closeLB();
+  lbClose.addEventListener('click', closeLightbox);
+  btnPrev.addEventListener('click', e => { e.stopPropagation(); prevImage(); });
+  btnNext.addEventListener('click', e => { e.stopPropagation(); nextImage(); });
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowRight' || e.key === 'Right') nextImage();
     if (e.key === 'ArrowLeft' || e.key === 'Left') prevImage();
   });
 
-  document.querySelectorAll('.project-card[data-lightbox]').forEach(function (card) {
-    card.addEventListener('click', function () {
-      var title = (card.querySelector('.project-name')  || {}).textContent || '';
-      var desc  = (card.querySelector('.project-blurb') || {}).textContent || '';
-      var galleryStr = card.dataset.gallery || '';
-      
+  document.querySelectorAll('.project-card[data-lightbox]').forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.querySelector('.project-name')?.textContent || '';
+      const desc = card.querySelector('.project-blurb')?.textContent || '';
+      const galleryStr = card.dataset.gallery || '';
+
       if (galleryStr) {
-        var images = galleryStr.split(',');
-        openLB('', title, desc, images, 0);
+        const images = galleryStr.split(',');
+        openLightbox('', title, desc, images, 0);
       } else {
-        var imgEl = card.querySelector('.project-image');
-        var src   = card.dataset.imgSrc || (imgEl ? imgEl.src : '');
-        openLB('<img src="' + src + '" alt="' + title + '" class="lightbox-img">', title, desc);
+        const imgEl = card.querySelector('.project-image');
+        const src = card.dataset.imgSrc || (imgEl ? imgEl.src : '');
+        openLightbox(`<img src="${src}" alt="${title}" class="lightbox-img">`, title, desc);
       }
     });
   });
 
-  document.querySelectorAll('.video-wrap[data-video]').forEach(function (wrap) {
-    wrap.addEventListener('click', function () {
-      var title = wrap.dataset.title || '';
-      var desc  = wrap.dataset.desc  || '';
-      var src   = wrap.dataset.video || '';
-      var html  =
-        '<video controls autoplay class="lightbox-video" style="width:min(800px,88vw)">' +
-          '<source src="' + src + '" type="video/mp4">' +
-        '</video>';
-      openLB(html, title, desc);
+  document.querySelectorAll('.video-wrap[data-video]').forEach(wrap => {
+    wrap.addEventListener('click', () => {
+      const title = wrap.dataset.title || '';
+      const desc = wrap.dataset.desc || '';
+      const src = wrap.dataset.video || '';
+      const html = `
+        <video controls autoplay class="lightbox-video" style="width:min(800px,88vw)">
+          <source src="${src}" type="video/mp4">
+        </video>
+      `;
+      openLightbox(html, title, desc);
     });
   });
 }
 
-/* ============================================================
-   7. SCROLL PROGRESS BAR
-   ============================================================ */
+// Progress bar indicating scroll depth
 function initScrollProgress() {
-  var bar = document.getElementById('scroll-progress');
+  const bar = document.getElementById('scroll-progress');
   if (!bar) return;
 
-  window.addEventListener('scroll', function () {
-    var scrolled = window.scrollY;
-    var total    = document.documentElement.scrollHeight - window.innerHeight;
-    var pct      = total > 0 ? (scrolled / total) * 100 : 0;
-    bar.style.width = pct + '%';
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = total > 0 ? (scrolled / total) * 100 : 0;
+    bar.style.width = `${pct}%`;
   }, { passive: true });
 }
 
-/* ============================================================
-   8. COUNTER ANIMATION (stat numbers count up on scroll-in)
-   ============================================================ */
+// Animated stats counters
 function initCounters() {
-  var counters = document.querySelectorAll('.stat-value');
+  const counters = document.querySelectorAll('.stat-value');
   if (!counters.length) return;
 
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      var el     = entry.target;
-      var raw    = el.textContent.trim();
-      var num    = parseFloat(raw.replace(/[^0-9.]/g, ''));
-      var suffix = raw.replace(/[0-9.]/g, '');
+      const el = entry.target;
+      const raw = el.textContent.trim();
+      const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+      const suffix = raw.replace(/[0-9.]/g, '');
       if (isNaN(num)) return;
 
-      var duration  = 1600;
-      var startTime = performance.now();
+      const duration = 1600;
+      const startTime = performance.now();
 
-      function tick(now) {
-        var elapsed  = now - startTime;
-        var progress = Math.min(elapsed / duration, 1);
-        /* ease-out cubic */
-        var eased   = 1 - Math.pow(1 - progress, 3);
+      const tick = (now) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
         el.textContent = Math.round(eased * num) + suffix;
         if (progress < 1) requestAnimationFrame(tick);
-      }
+      };
 
       requestAnimationFrame(tick);
-      io.unobserve(el);
+      observer.unobserve(el);
     });
   }, { threshold: 0.5 });
 
-  counters.forEach(function (c) { io.observe(c); });
+  counters.forEach(c => observer.observe(c));
 }
 
-/* ============================================================
-   9. HERO PARALLAX (subtle mouse-depth)
-   ============================================================ */
+// Subtle parallax effect on hero element
 function initHeroParallax() {
-  var title = document.querySelector('.hero-title');
+  const title = document.querySelector('.hero-title');
   if (!title) return;
 
-  var ticking = false;
-  document.addEventListener('mousemove', function (e) {
+  let ticking = false;
+  document.addEventListener('mousemove', (e) => {
     if (ticking) return;
     ticking = true;
-    requestAnimationFrame(function () {
-      var cx = window.innerWidth  / 2;
-      var cy = window.innerHeight / 2;
-      var dx = (e.clientX - cx) / cx;
-      var dy = (e.clientY - cy) / cy;
-      title.style.transform = 'translate(' + (dx * 5) + 'px, ' + (dy * 3) + 'px)';
+    requestAnimationFrame(() => {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      const dx = (e.clientX - cx) / cx;
+      const dy = (e.clientY - cy) / cy;
+      title.style.transform = `translate(${dx * 5}px, ${dy * 3}px)`;
       ticking = false;
     });
   }, { passive: true });
