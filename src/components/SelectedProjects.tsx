@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { ArrowUpRight, ExternalLink } from 'lucide-react';
-import { ProjectModal } from './ProjectModal';
+import { useState, useRef, useEffect } from 'react';
+import { ArrowUpRight, ExternalLink, X, ChevronDown, CheckCircle, Code, ShieldCheck } from 'lucide-react';
 import type { ProjectData } from './ProjectModal';
 
 const projects: ProjectData[] = [
@@ -191,7 +190,7 @@ const projects: ProjectData[] = [
   },
   {
     id: 'maison',
-    title: 'Maison D\'Art — Editorial Store',
+    title: "Maison D'Art — Editorial Store",
     category: 'Editorial',
     subtitle: 'High-craft e-commerce storytelling experience for haute couture luxury fashion.',
     image: '/projects/ecommerce_editorial.png',
@@ -217,10 +216,168 @@ const projects: ProjectData[] = [
 
 const FILTERS = ['All', 'Healthcare', 'Gaming UI', 'Enterprise', 'Editorial'];
 
-function ProjectCard({ project, onOpen }: { project: ProjectData; onOpen: () => void }) {
+function InlineCaseStudy({ project, onClose }: { project: ProjectData; onClose: () => void }) {
+  const [activeTab, setActiveTab] = useState<'overview' | 'architecture' | 'impact'>('overview');
+  const [selectedImg, setSelectedImg] = useState(project.image);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setSelectedImg(project.image);
+    setActiveTab('overview');
+    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [project]);
+
+  const photos = project.galleryImages || [project.image];
+  const hasDemo = Boolean(project.demoUrl && project.demoUrl !== '#');
+  const hasGithub = Boolean(project.githubUrl && project.githubUrl !== '#');
+
   return (
     <div
-      className="card rounded-3xl overflow-hidden flex flex-col cursor-pointer transition-colors duration-300"
+      ref={ref}
+      className="col-span-1 md:col-span-2 rounded-3xl bg-white dark:bg-[#1E293B] border border-[#2563EB]/20 dark:border-[#2563EB]/30 shadow-2xl overflow-hidden"
+    >
+      <div className="flex items-center justify-between p-5 md:px-8 bg-[#F8FAFC] dark:bg-[#0B0F17] border-b border-[#0F2C59]/10 dark:border-white/10">
+        <div>
+          <div className="flex items-center gap-3 mb-1">
+            <span className="px-3 py-1 rounded-full bg-[#0F2C59]/10 dark:bg-white/10 text-[#0F2C59] dark:text-[#60A5FA] font-mono text-xs font-semibold uppercase tracking-wider">
+              {project.category}
+            </span>
+            <span className="text-xs font-mono text-[#0F172A]/50 dark:text-[#F8FAFC]/50">{project.year} · {project.client}</span>
+          </div>
+          <h3 className="font-monument text-lg md:text-2xl text-[#0F172A] dark:text-[#F8FAFC] leading-tight">
+            {project.title}
+          </h3>
+        </div>
+        <button
+          onClick={onClose}
+          className="p-2.5 rounded-full bg-white dark:bg-[#1E293B] border border-[#0F2C59]/15 dark:border-white/15 text-[#0F172A] dark:text-white hover:bg-[#0F2C59] hover:text-white transition-colors shrink-0 ml-4"
+          aria-label="Close case study"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
+      <div className="p-5 md:p-8 space-y-6">
+        <div className="relative w-full h-56 md:h-80 rounded-2xl overflow-hidden bg-[#0F172A] border border-[#0F2C59]/10 dark:border-white/10">
+          <img
+            src={selectedImg}
+            alt={project.title}
+            className="w-full h-full object-contain md:object-cover transition-all duration-300"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/60 via-transparent to-transparent flex items-end p-5 pointer-events-none">
+            <p className="text-white text-xs md:text-sm font-light italic">"{project.subtitle}"</p>
+          </div>
+        </div>
+
+        {photos.length > 1 && (
+          <div className="flex gap-3 overflow-x-auto pb-1">
+            {photos.map((img, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSelectedImg(img)}
+                className={`relative w-24 h-16 rounded-xl overflow-hidden shrink-0 border-2 transition-all duration-200 ${
+                  selectedImg === img
+                    ? 'border-[#2563EB] ring-2 ring-[#2563EB]/30 scale-105'
+                    : 'border-[#0F2C59]/10 dark:border-white/10 opacity-70 hover:opacity-100'
+                }`}
+              >
+                <img src={img} alt={`Screenshot ${idx + 1}`} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="flex gap-6 border-b border-[#0F2C59]/10 dark:border-white/10">
+          {(['overview', 'architecture', 'impact'] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-3 capitalize text-sm font-medium border-b-2 transition-all ${
+                activeTab === tab
+                  ? 'border-[#2563EB] text-[#2563EB] dark:text-[#60A5FA] font-semibold'
+                  : 'border-transparent text-[#0F172A]/60 dark:text-[#F8FAFC]/60 hover:text-[#0F172A] dark:hover:text-white'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {activeTab === 'overview' && (
+          <div className="space-y-5">
+            <p className="text-[#0F172A]/80 dark:text-[#F8FAFC]/80 leading-relaxed text-sm md:text-base">
+              {project.summary}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {project.tags.map((tag, i) => (
+                <span key={i} className="px-3 py-1.5 rounded-full bg-[#0F2C59]/05 dark:bg-white/10 border border-[#0F2C59]/10 dark:border-white/10 text-[#0F172A] dark:text-white font-mono text-xs">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'architecture' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {project.architecture.map((item, i) => (
+              <div key={i} className="p-4 rounded-xl bg-[#F8FAFC] dark:bg-[#0B0F17] border border-[#0F2C59]/10 dark:border-white/10 flex items-start gap-3">
+                <Code className="w-5 h-5 text-[#2563EB] dark:text-[#60A5FA] shrink-0 mt-0.5" />
+                <span className="text-xs font-mono text-[#0F172A]/80 dark:text-[#F8FAFC]/80 leading-relaxed">{item}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeTab === 'impact' && (
+          <div className="space-y-5">
+            <div className="p-5 rounded-2xl bg-[#0F2C59] dark:bg-[#2563EB] text-white space-y-2">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-[#60A5FA] dark:text-white" />
+                <span className="font-semibold">Key Result</span>
+              </div>
+              <p className="text-sm font-light leading-relaxed opacity-90">{project.outcome}</p>
+            </div>
+            <ul className="space-y-2">
+              {project.challenges.map((c, i) => (
+                <li key={i} className="flex items-start gap-3 text-sm text-[#0F172A]/80 dark:text-[#F8FAFC]/80">
+                  <ShieldCheck className="w-4 h-4 text-[#2563EB] dark:text-[#60A5FA] shrink-0 mt-0.5" />
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[#0F2C59]/08 dark:border-white/10">
+          <div className="flex gap-3">
+            {hasDemo && (
+              <a href={project.demoUrl} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2563EB] text-white font-semibold text-xs tracking-wider hover:bg-[#0F2C59] transition-colors shadow-md">
+                Live Demo <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            )}
+            {hasGithub && (
+              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#0F2C59]/15 dark:border-white/15 text-[#0F172A] dark:text-white font-semibold text-xs hover:border-[#2563EB] hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors">
+                Source Code
+              </a>
+            )}
+          </div>
+          <button onClick={onClose}
+            className="text-xs text-[#0F172A]/50 dark:text-[#F8FAFC]/50 hover:text-[#0F172A] dark:hover:text-white font-mono underline transition-colors">
+            Close ↑
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProjectCard({ project, isActive, onOpen }: { project: ProjectData; isActive: boolean; onOpen: () => void }) {
+  return (
+    <div
+      className={`card rounded-3xl overflow-hidden flex flex-col cursor-pointer transition-all duration-300 ${isActive ? 'ring-2 ring-[#2563EB] ring-offset-2 dark:ring-offset-[#0B0F17]' : ''}`}
       onClick={onOpen}
     >
       <div className="relative aspect-[16/9] bg-[#0F2C59]/05 dark:bg-[#1E293B]">
@@ -231,10 +388,16 @@ function ProjectCard({ project, onOpen }: { project: ProjectData; onOpen: () => 
           loading="lazy"
           decoding="async"
         />
-
         <span className="absolute top-3 left-3 badge bg-white/90 dark:bg-[#0F172A]/90 backdrop-blur-sm border-[#0F2C59]/12 text-[#0F2C59] dark:text-[#60A5FA]">
           {project.category}
         </span>
+        {isActive && (
+          <div className="absolute inset-0 bg-[#2563EB]/10 flex items-center justify-center">
+            <div className="bg-[#2563EB] text-white text-xs font-mono px-3 py-1.5 rounded-full flex items-center gap-1.5">
+              <ChevronDown className="w-3.5 h-3.5" /> Expanded below
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="p-7 flex flex-col flex-1 gap-5">
@@ -245,7 +408,7 @@ function ProjectCard({ project, onOpen }: { project: ProjectData; onOpen: () => 
               {project.title}
             </h3>
           </div>
-          <div className="w-9 h-9 rounded-xl border border-[#0F2C59]/10 dark:border-white/10 flex items-center justify-center text-[#0F172A]/40 dark:text-[#F8FAFC]/40 shrink-0 mt-1">
+          <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 mt-1 transition-colors ${isActive ? 'bg-[#2563EB] border-[#2563EB] text-white' : 'border-[#0F2C59]/10 dark:border-white/10 text-[#0F172A]/40 dark:text-[#F8FAFC]/40'}`}>
             <ArrowUpRight className="w-4 h-4" />
           </div>
         </div>
@@ -262,34 +425,10 @@ function ProjectCard({ project, onOpen }: { project: ProjectData; onOpen: () => 
           ))}
         </div>
 
-        <div className="pt-4 border-t border-[#0F2C59]/06 dark:border-white/10 flex items-center justify-between">
-          <button className="text-xs font-semibold text-[#2563EB] dark:text-[#60A5FA] underline-offset-2">
-            Full Case Study →
-          </button>
-          <div className="flex gap-2">
-            {project.githubUrl && project.githubUrl !== '#' && (
-              <a
-                href={project.githubUrl}
-                onClick={(e) => e.stopPropagation()}
-                className="p-2 rounded-lg text-[#0F172A]/40 dark:text-[#F8FAFC]/40 hover:text-[#0F2C59] dark:hover:text-white transition-colors"
-                aria-label="GitHub"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                </svg>
-              </a>
-            )}
-            {project.demoUrl && project.demoUrl !== '#' && (
-              <a
-                href={project.demoUrl}
-                onClick={(e) => e.stopPropagation()}
-                className="p-2 rounded-lg text-[#0F172A]/40 dark:text-[#F8FAFC]/40 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
-                aria-label="Live demo"
-              >
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            )}
-          </div>
+        <div className="pt-4 border-t border-[#0F2C59]/06 dark:border-white/10">
+          <span className={`text-xs font-semibold underline-offset-2 ${isActive ? 'text-[#2563EB] dark:text-[#60A5FA]' : 'text-[#2563EB] dark:text-[#60A5FA]'}`}>
+            {isActive ? 'Close Case Study ↑' : 'Full Case Study →'}
+          </span>
         </div>
       </div>
     </div>
@@ -298,9 +437,21 @@ function ProjectCard({ project, onOpen }: { project: ProjectData; onOpen: () => 
 
 export const SelectedProjects = () => {
   const [filter, setFilter] = useState('All');
-  const [modal, setModal] = useState<ProjectData | null>(null);
+  const [openId, setOpenId] = useState<string | null>(null);
 
   const filtered = filter === 'All' ? projects : projects.filter((p) => p.category === filter);
+  const openProject = projects.find((p) => p.id === openId) || null;
+
+  const handleOpen = (id: string) => {
+    setOpenId((prev) => (prev === id ? null : id));
+  };
+
+  const handleClose = () => setOpenId(null);
+
+  const rows: ProjectData[][] = [];
+  for (let i = 0; i < filtered.length; i += 2) {
+    rows.push(filtered.slice(i, i + 2));
+  }
 
   return (
     <section id="projects" className="py-24 md:py-32">
@@ -318,7 +469,7 @@ export const SelectedProjects = () => {
             {FILTERS.map((f) => (
               <button
                 key={f}
-                onClick={() => setFilter(f)}
+                onClick={() => { setFilter(f); setOpenId(null); }}
                 className={`px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all duration-300 ${filter === f
                   ? 'bg-[#0F2C59] dark:bg-[#2563EB] text-white shadow-sm'
                   : 'text-[#0F172A]/60 dark:text-[#F8FAFC]/60 hover:text-[#0F2C59] dark:hover:text-white hover:bg-[#0F2C59]/05 dark:hover:bg-white/10'
@@ -330,19 +481,34 @@ export const SelectedProjects = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[500px]">
-          {filtered.map((project) => (
-            <div
-              key={`${filter}-${project.id}`}
-              className="transition-all duration-300"
-            >
-              <ProjectCard project={project} onOpen={() => setModal(project)} />
+        <div className="space-y-8">
+          {rows.map((row, rowIdx) => (
+            <div key={rowIdx}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {row.map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    isActive={openId === project.id}
+                    onOpen={() => handleOpen(project.id)}
+                  />
+                ))}
+                {row.length === 1 && <div />}
+              </div>
+
+              {row.some((p) => p.id === openId) && openProject && (
+                <div className="mt-8 grid grid-cols-1 md:grid-cols-2">
+                  <InlineCaseStudy
+                    key={openProject.id}
+                    project={openProject}
+                    onClose={handleClose}
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
       </div>
-
-      <ProjectModal project={modal} onClose={() => setModal(null)} />
     </section>
   );
 };
