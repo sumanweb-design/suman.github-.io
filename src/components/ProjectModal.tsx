@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, ExternalLink, CheckCircle, Code, ShieldCheck, Image as ImageIcon } from 'lucide-react';
 
 export interface ProjectData {
@@ -27,6 +27,33 @@ interface ProjectModalProps {
 export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'photos' | 'architecture' | 'impact'>('overview');
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (project) {
+      setActiveTab('overview');
+      setSelectedImg(null);
+      document.body.style.overflow = 'hidden';
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop = 0;
+      }
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [project]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && project) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [project, onClose]);
 
   if (!project) return null;
 
@@ -36,12 +63,15 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   const photos = project.galleryImages || [project.image];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-[#0F172A]/70 backdrop-blur-md animate__animated animate__fadeIn animate__faster">
+    <div
+      className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center p-3 sm:p-4 md:p-6 bg-[#0F172A]/80 backdrop-blur-md overflow-y-auto pt-16 sm:pt-6 md:pt-8 animate__animated animate__fadeIn animate__faster"
+      onClick={onClose}
+    >
       <div
-        className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-[#1E293B] rounded-3xl overflow-hidden shadow-2xl border border-[#0F2C59]/10 dark:border-white/10 flex flex-col animate__animated animate__zoomIn animate__faster"
+        className="relative w-full max-w-4xl max-h-[82vh] sm:max-h-[88vh] bg-white dark:bg-[#1E293B] rounded-3xl overflow-hidden shadow-2xl border border-[#0F2C59]/10 dark:border-white/10 flex flex-col my-auto animate__animated animate__zoomIn animate__faster"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-6 md:px-8 border-b border-[#0F2C59]/10 dark:border-white/10 bg-[#F8FAFC] dark:bg-[#0B0F17]">
+        <div className="flex items-center justify-between p-5 md:p-6 md:px-8 border-b border-[#0F2C59]/10 dark:border-white/10 bg-[#F8FAFC] dark:bg-[#0B0F17] shrink-0">
           <div>
             <div className="flex items-center gap-3">
               <span className="px-3 py-1 rounded-full bg-[#0F2C59]/10 dark:bg-white/10 text-[#0F2C59] dark:text-[#60A5FA] font-mono text-xs font-semibold uppercase tracking-wider">
@@ -49,30 +79,30 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
               </span>
               <span className="text-xs font-mono text-[#0F172A]/50 dark:text-[#F8FAFC]/50">{project.year} • {project.client}</span>
             </div>
-            <h2 className="font-serif-editorial text-2xl md:text-4xl text-[#0F172A] dark:text-[#F8FAFC] mt-1">
+            <h2 className="font-serif-editorial text-xl md:text-3xl font-bold text-[#0F172A] dark:text-[#F8FAFC] mt-1">
               {project.title}
             </h2>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2.5 rounded-full bg-white dark:bg-[#1E293B] border border-[#0F2C59]/15 dark:border-white/15 text-[#0F172A] dark:text-white hover:bg-[#0F2C59] hover:text-white transition-colors interactive"
+            className="p-2.5 rounded-full bg-white dark:bg-[#1E293B] border border-[#0F2C59]/15 dark:border-white/15 text-[#0F172A] dark:text-white hover:bg-[#0F2C59] hover:text-white transition-colors shrink-0 ml-3"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="overflow-y-auto p-6 md:p-8 space-y-8 flex-1">
+        <div ref={scrollContainerRef} className="overflow-y-auto p-5 md:p-8 space-y-6 flex-1">
           <div className="space-y-3">
-            <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden shadow-md border border-[#0F2C59]/10 dark:border-white/10 bg-[#0F172A]">
+            <div className="relative w-full h-56 md:h-96 rounded-2xl overflow-hidden shadow-md border border-[#0F2C59]/10 dark:border-white/10 bg-[#0F172A]">
               <img
                 src={currentImage}
                 alt={project.title}
                 className="w-full h-full object-contain md:object-cover transition-all duration-300"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/70 via-transparent to-transparent flex items-end p-6 pointer-events-none">
-                <p className="text-white text-sm md:text-base font-light italic drop-shadow-md">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/70 via-transparent to-transparent flex items-end p-4 md:p-6 pointer-events-none">
+                <p className="text-white text-xs md:text-base font-light italic drop-shadow-md">
                   "{project.subtitle}"
                 </p>
               </div>
@@ -105,7 +135,7 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`pb-3 capitalize transition-all border-b-2 interactive flex items-center gap-1.5 ${
+                className={`pb-3 capitalize transition-all border-b-2 flex items-center gap-1.5 ${
                   activeTab === tab
                     ? 'border-[#2563EB] text-[#2563EB] dark:text-[#60A5FA] font-semibold'
                     : 'border-transparent text-[#0F172A]/60 dark:text-[#F8FAFC]/60 hover:text-[#0F172A] dark:hover:text-white'
@@ -123,7 +153,7 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 <h3 className="text-sm uppercase tracking-wider font-mono text-[#0F2C59]/60 dark:text-white/60 font-semibold mb-2">
                   Executive Summary
                 </h3>
-                <p className="text-[#0F172A]/80 dark:text-[#F8FAFC]/80 font-sans-clean leading-relaxed text-base">
+                <p className="text-[#0F172A]/80 dark:text-[#F8FAFC]/80 leading-relaxed text-sm md:text-base">
                   {project.summary}
                 </p>
               </div>
@@ -231,14 +261,14 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
           )}
         </div>
 
-        <div className="p-6 md:px-8 border-t border-[#0F2C59]/10 dark:border-white/10 bg-[#F8FAFC] dark:bg-[#0B0F17] flex flex-wrap items-center justify-between gap-4">
+        <div className="p-5 md:px-8 border-t border-[#0F2C59]/10 dark:border-white/10 bg-[#F8FAFC] dark:bg-[#0B0F17] flex flex-wrap items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-4">
             {hasDemo && (
               <a
                 href={project.demoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#2563EB] text-white font-semibold text-xs tracking-wider hover:bg-[#0F2C59] transition-colors shadow-md interactive"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#2563EB] text-white font-semibold text-xs tracking-wider hover:bg-[#0F2C59] transition-colors shadow-md"
               >
                 <span>Live Demonstration</span>
                 <ExternalLink className="w-4 h-4" />
@@ -250,7 +280,7 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-[#1E293B] border border-[#0F2C59]/15 dark:border-white/15 text-[#0F172A] dark:text-white font-semibold text-xs tracking-wider hover:border-[#2563EB] hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors interactive"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-[#1E293B] border border-[#0F2C59]/15 dark:border-white/15 text-[#0F172A] dark:text-white font-semibold text-xs tracking-wider hover:border-[#2563EB] hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -262,7 +292,7 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 
           <button
             onClick={onClose}
-            className="text-xs text-[#0F172A]/60 dark:text-[#F8FAFC]/60 hover:text-[#0F172A] dark:hover:text-white font-mono underline interactive"
+            className="text-xs text-[#0F172A]/60 dark:text-[#F8FAFC]/60 hover:text-[#0F172A] dark:hover:text-white font-mono underline"
           >
             Close Detail View
           </button>
