@@ -33,16 +33,10 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
     if (project) {
       setActiveTab('overview');
       setSelectedImg(null);
-      document.body.style.overflow = 'hidden';
       if (scrollContainerRef.current) {
         scrollContainerRef.current.scrollTop = 0;
       }
-    } else {
-      document.body.style.overflow = '';
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [project]);
 
   useEffect(() => {
@@ -64,11 +58,11 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center p-3 sm:p-4 md:p-6 bg-[#0F172A]/80 backdrop-blur-md overflow-y-auto pt-16 sm:pt-6 md:pt-8 animate__animated animate__fadeIn animate__faster"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4 md:p-6 bg-[#0F172A]/80 backdrop-blur-md overflow-y-auto animate__animated animate__fadeIn animate__faster"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl max-h-[82vh] sm:max-h-[88vh] bg-white dark:bg-[#1E293B] rounded-3xl overflow-hidden shadow-2xl border border-[#0F2C59]/10 dark:border-white/10 flex flex-col my-auto animate__animated animate__zoomIn animate__faster"
+        className="relative w-full max-w-4xl max-h-[85vh] sm:max-h-[90vh] bg-white dark:bg-[#1E293B] rounded-3xl overflow-hidden shadow-2xl border border-[#0F2C59]/10 dark:border-white/10 flex flex-col animate__animated animate__zoomIn animate__faster"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-5 md:p-6 md:px-8 border-b border-[#0F2C59]/10 dark:border-white/10 bg-[#F8FAFC] dark:bg-[#0B0F17] shrink-0">
