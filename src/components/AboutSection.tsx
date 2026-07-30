@@ -1,4 +1,3 @@
-import React from 'react';
 import { Compass, Lightbulb, Zap, ShieldCheck, ArrowRight } from 'lucide-react';
 
 const pillars = [
@@ -22,7 +21,7 @@ const pillars = [
   },
 ];
 
-export const AboutSection: React.FC = () => {
+export const AboutSection = () => {
   return (
     <section id="about" className="py-24 md:py-32 relative overflow-hidden">
       <div className="blob blob-pale absolute -bottom-40 -left-40 w-[600px] h-[600px] opacity-60 pulse-glow" />

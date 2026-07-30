@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Terminal, Cpu, CheckCircle2 } from 'lucide-react';
 
-export const CodeSculptureCanvas: React.FC = () => {
+export const CodeSculptureCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [activeTab, setActiveTab] = useState<'architecture' | 'shader' | 'physics'>('architecture');
@@ -112,7 +112,7 @@ export const CodeSculptureCanvas: React.FC = () => {
     };
   }, [mousePos]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;

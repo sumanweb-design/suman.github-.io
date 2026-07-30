@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { X, ExternalLink, CheckCircle, Code, ShieldCheck, Image as ImageIcon } from 'lucide-react';
 
 export interface ProjectData {
@@ -24,7 +24,7 @@ interface ProjectModalProps {
   onClose: () => void;
 }
 
-export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
+export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'photos' | 'architecture' | 'impact'>('overview');
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
 

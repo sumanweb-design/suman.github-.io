@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export const CustomCursor: React.FC = () => {
+export const CustomCursor = () => {
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [trailingPos, setTrailingPos] = useState({ x: -100, y: -100 });
   const [isHovered, setIsHovered] = useState(false);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { ArrowUp } from 'lucide-react';
 
 const MARQUEE_ITEMS = [
@@ -7,7 +7,7 @@ const MARQUEE_ITEMS = [
   'Web Performance', 'WCAG AA', 'Lighthouse 99',
 ];
 
-export const Footer: React.FC = () => {
+export const Footer = () => {
   const [time, setTime] = useState('');
   const [showTop, setShowTop] = useState(false);
 
@@ -32,10 +32,10 @@ export const Footer: React.FC = () => {
         <div className="flex">
           <div className="marquee-track flex items-center gap-0 shrink-0">
             {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
-              <React.Fragment key={i}>
+              <Fragment key={i}>
                 <span className="text-[11px] font-mono font-medium uppercase tracking-widest text-[#0F2C59]/40 dark:text-white/40 whitespace-nowrap px-6">{item}</span>
                 <span className="text-[#0F2C59]/15 dark:text-white/15 select-none">·</span>
-              </React.Fragment>
+              </Fragment>
             ))}
           </div>
         </div>

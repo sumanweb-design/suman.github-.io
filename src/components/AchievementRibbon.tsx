@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const METRICS = [
   { value: 2, suffix: 'y+', label: 'Years Experience', sub: 'Building modern frontend web applications' },
@@ -39,7 +39,7 @@ function Counter({ target, suffix }: { target: number; suffix: string }) {
   return <span ref={ref}>{n}{suffix}</span>;
 }
 
-export const AchievementRibbon: React.FC = () => {
+export const AchievementRibbon = () => {
   return (
     <section id="achievements" className="py-10 relative z-20">
       <div className="max-w-7xl mx-auto px-5 md:px-10">

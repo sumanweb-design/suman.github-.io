@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Send, CheckCircle2, Mail, ArrowRight, Phone } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-const BUDGETS = ['< $20k', '$20k–$50k', '$50k–$100k', '$100k+'];
+const BUDGETS = ['< $5k', '$5k–$10k', '$10k–$25k', '$25k+'];
 
 const isValidEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-export const ContactSection: React.FC = () => {
+export const ContactSection = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', whatsapp: false, budget: '$20k–$50k', message: '' });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -15,7 +15,7 @@ export const ContactSection: React.FC = () => {
 
   const update = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!form.name.trim()) {
@@ -34,39 +34,67 @@ export const ContactSection: React.FC = () => {
     setError('');
     setSubmitting(true);
 
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || 'd12bf1db-d00c-4775-8348-5cec24b82ab3';
+
     try {
-      const formData = new FormData();
-      formData.append('access_key', 'YOUR_WEB3FORMS_ACCESS_KEY');
-      formData.append('name', form.name);
-      formData.append('email', form.email);
-      formData.append('budget', form.budget);
-      formData.append('message', form.message);
-      formData.append('subject', `New Project Brief from ${form.name}`);
-      if (form.phone) {
-        formData.append('phone', form.phone);
-        formData.append('preferred_contact', form.whatsapp ? 'WhatsApp' : 'Phone/Email');
-      }
+      let success = false;
 
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData,
-      });
+      if (accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY') {
+        const formData = new FormData();
+        formData.append('access_key', accessKey);
+        formData.append('name', form.name);
+        formData.append('email', form.email);
+        formData.append('budget', form.budget);
+        formData.append('message', form.message);
+        formData.append('subject', `New Project Brief from ${form.name}`);
+        if (form.phone) {
+          formData.append('phone', form.phone);
+          formData.append('preferred_contact', form.whatsapp ? 'WhatsApp' : 'Phone/Email');
+        }
 
-      const data = await res.json().catch(() => null);
-
-      if (res.ok && data?.success !== 'false') {
-        setSubmitted(true);
-        confetti({
-          particleCount: 120,
-          spread: 90,
-          origin: { y: 0.55 },
-          colors: ['#2563EB', '#0F2C59', '#60A5FA', '#93C5FD'],
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData,
         });
-      } else {
-        setError('Something went wrong. Please email me directly at sumanverse95@gmail.com');
+
+        const data = await res.json().catch(() => null);
+        if (res.ok && data?.success) {
+          success = true;
+        }
       }
+
+      // If Web3Forms key is not configured or failed, fallback to mailto / WhatsApp dispatch
+      if (!success) {
+        const subject = encodeURIComponent(`Project Brief from ${form.name}`);
+        const body = encodeURIComponent(
+          `Hi Suman,\n\nName: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone || 'N/A'}${form.whatsapp ? ' (WhatsApp)' : ''}\nBudget: ${form.budget}\n\nProject Goals:\n${form.message}`
+        );
+
+        if (form.whatsapp && form.phone) {
+          const waMsg = encodeURIComponent(
+            `Hi Suman! I'm ${form.name}.\nEmail: ${form.email}\nPhone: ${form.phone}\nBudget: ${form.budget}\n\nProject Goals:\n${form.message}`
+          );
+          window.open(`https://wa.me/919907402769?text=${waMsg}`, '_blank');
+        } else {
+          window.location.href = `mailto:sumanverse95@gmail.com?subject=${subject}&body=${body}`;
+        }
+      }
+
+      setSubmitted(true);
+      confetti({
+        particleCount: 120,
+        spread: 90,
+        origin: { y: 0.55 },
+        colors: ['#2563EB', '#0F2C59', '#60A5FA', '#93C5FD'],
+      });
     } catch {
-      setError('Network error. Please check your connection or email me at sumanverse95@gmail.com');
+      // Fallback on error
+      const subject = encodeURIComponent(`Project Brief from ${form.name}`);
+      const body = encodeURIComponent(
+        `Hi Suman,\n\nName: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone || 'N/A'}\nBudget: ${form.budget}\n\nProject Goals:\n${form.message}`
+      );
+      window.location.href = `mailto:sumanverse95@gmail.com?subject=${subject}&body=${body}`;
+      setSubmitted(true);
     } finally {
       setSubmitting(false);
     }
@@ -201,11 +229,10 @@ export const ContactSection: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setForm((f) => ({ ...f, whatsapp: !f.whatsapp }))}
-                        className={`flex items-center gap-2 px-4 py-3.5 rounded-xl border text-xs font-mono font-semibold transition-all duration-300 whitespace-nowrap ${
-                          form.whatsapp
-                            ? 'bg-emerald-500 border-emerald-500 text-white shadow-md'
-                            : 'bg-white dark:bg-[#0B0F17] border-[#0F2C59]/12 dark:border-white/10 text-[#0F172A]/60 dark:text-white/60 hover:border-emerald-400 hover:text-emerald-600'
-                        }`}
+                        className={`flex items-center gap-2 px-4 py-3.5 rounded-xl border text-xs font-mono font-semibold transition-all duration-300 whitespace-nowrap ${form.whatsapp
+                          ? 'bg-emerald-500 border-emerald-500 text-white shadow-md'
+                          : 'bg-white dark:bg-[#0B0F17] border-[#0F2C59]/12 dark:border-white/10 text-[#0F172A]/60 dark:text-white/60 hover:border-emerald-400 hover:text-emerald-600'
+                          }`}
                         title="Check if this number is also on WhatsApp"
                       >
                         <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -231,8 +258,8 @@ export const ContactSection: React.FC = () => {
                           type="button"
                           onClick={() => update('budget', b)}
                           className={`py-3 px-2 rounded-xl text-xs font-mono font-semibold transition-all duration-300 ${form.budget === b
-                              ? 'bg-[#0F2C59] dark:bg-[#2563EB] text-white shadow-md'
-                              : 'bg-white dark:bg-[#0B0F17] text-[#0F172A]/70 dark:text-white/70 border border-[#0F2C59]/10 dark:border-white/10 hover:border-[#2563EB] hover:text-[#2563EB] dark:hover:text-[#60A5FA]'
+                            ? 'bg-[#0F2C59] dark:bg-[#2563EB] text-white shadow-md'
+                            : 'bg-white dark:bg-[#0B0F17] text-[#0F172A]/70 dark:text-white/70 border border-[#0F2C59]/10 dark:border-white/10 hover:border-[#2563EB] hover:text-[#2563EB] dark:hover:text-[#60A5FA]'
                             }`}
                         >
                           {b}

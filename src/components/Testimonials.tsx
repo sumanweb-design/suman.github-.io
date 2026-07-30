@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Star, Building2, Quote } from 'lucide-react';
 
 const testimonials = [
@@ -28,7 +28,7 @@ const testimonials = [
   },
 ];
 
-export const Testimonials: React.FC = () => {
+export const Testimonials = () => {
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
 

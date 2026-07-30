@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Sun, Moon } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Sun, Moon, Menu, X } from 'lucide-react';
 
-const ScrollProgress: React.FC = () => {
+const ScrollProgress = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -26,8 +26,9 @@ const ScrollProgress: React.FC = () => {
   );
 };
 
-export const Navbar: React.FC = () => {
+export const Navbar = () => {
   const [activeSection, setActiveSection] = useState('hero');
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme') as 'light' | 'dark';
@@ -49,9 +50,7 @@ export const Navbar: React.FC = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
+  const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
 
   const handleScroll = useCallback(() => {
     const sections = ['hero', 'projects', 'skills', 'about'];
@@ -74,6 +73,15 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
   const navItems = [
     { label: 'Home', id: 'hero' },
     { label: 'Work', id: 'projects' },
@@ -81,12 +89,20 @@ export const Navbar: React.FC = () => {
     { label: 'About', id: 'about' },
   ];
 
+  const handleNavClick = (id: string) => {
+    setMobileOpen(false);
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <>
       <ScrollProgress />
-      <header className="fixed top-4 left-0 right-0 z-50 pointer-events-none px-4 md:px-8">
+
+      {/* ─── DESKTOP NAV ─── */}
+      <header className="hidden md:block fixed top-4 left-0 right-0 z-50 pointer-events-none px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="hidden md:flex w-44" />
+          <div className="flex w-44" />
 
           <nav className="pointer-events-auto flex items-center gap-1 p-1 rounded-full bg-white/80 dark:bg-[#1E293B]/80 backdrop-blur-md border border-[#0F2C59]/15 dark:border-white/10 shadow-lg shadow-[#0F2C59]/5 transition-all duration-300">
             {navItems.map((item) => {
@@ -98,7 +114,7 @@ export const Navbar: React.FC = () => {
                   className={`relative px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 ${
                     active
                       ? 'bg-[#0F2C59] dark:bg-[#2563EB] text-white shadow-sm font-bold'
-                      : 'text-[#0F172A]/70 dark:text-[#F8FAFC]/70 hover:text-[#0F2C59] dark:hover:text-white hover:bg-[#0F2C59]/05 dark:hover:bg-white/10'
+                      : 'text-[#0F172A]/70 dark:text-[#F8FAFC]/70 hover:text-[#0F2C59] dark:hover:text-white hover:bg-[#0F2C59]/5 dark:hover:bg-white/10'
                   }`}
                 >
                   {item.label}
@@ -114,9 +130,9 @@ export const Navbar: React.FC = () => {
               className="flex items-center justify-center w-9 h-9 rounded-full bg-white/80 dark:bg-[#1E293B]/80 border border-[#0F2C59]/15 dark:border-white/10 text-[#0F172A] dark:text-white hover:border-[#2563EB] hover:text-[#2563EB] dark:hover:text-[#60A5FA] shadow-md transition-all duration-300"
             >
               {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400 transition-transform duration-300" />
+                <Sun className="w-4 h-4 text-amber-400" />
               ) : (
-                <Moon className="w-4 h-4 text-[#0F2C59] transition-transform duration-300" />
+                <Moon className="w-4 h-4 text-[#0F2C59]" />
               )}
             </button>
 
@@ -130,6 +146,94 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
       </header>
+
+      {/* ─── MOBILE TOP BAR ─── */}
+      <header className="md:hidden fixed top-0 left-0 right-0 z-50 px-4 py-3 flex items-center justify-between bg-white/90 dark:bg-[#0B0F17]/90 backdrop-blur-md border-b border-[#0F2C59]/08 dark:border-white/08">
+        <div className="flex items-center gap-2">
+          <img
+            src="/favicon.png"
+            alt="Suman"
+            className="w-7 h-7 rounded-lg object-cover border border-[#0F2C59]/10 dark:border-white/10"
+          />
+          <span className="text-sm font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight">
+            Suman
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-[#F1F5F9] dark:bg-[#1E293B] border border-[#0F2C59]/10 dark:border-white/10 text-[#0F172A] dark:text-white transition-all duration-300"
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-3.5 h-3.5 text-amber-400" />
+            ) : (
+              <Moon className="w-3.5 h-3.5 text-[#0F2C59]" />
+            )}
+          </button>
+
+          <button
+            onClick={() => setMobileOpen((o) => !o)}
+            aria-label="Toggle menu"
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-[#0F2C59] dark:bg-[#2563EB] text-white transition-all duration-300 active:scale-95"
+          >
+            {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
+        </div>
+      </header>
+
+      {/* ─── MOBILE SLIDE-DOWN MENU ─── */}
+      <div
+        className={`md:hidden fixed inset-0 z-40 transition-all duration-300 ${
+          mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div
+          className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+          onClick={() => setMobileOpen(false)}
+        />
+        <div
+          className={`absolute top-[57px] left-0 right-0 bg-white dark:bg-[#0B0F17] border-b border-[#0F2C59]/08 dark:border-white/08 shadow-2xl transition-all duration-300 ${
+            mobileOpen ? 'translate-y-0' : '-translate-y-4'
+          }`}
+        >
+          <nav className="flex flex-col px-4 py-4 gap-1">
+            {navItems.map((item) => {
+              const active = activeSection === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`w-full text-left px-4 py-3.5 rounded-2xl text-sm font-semibold tracking-wide transition-all duration-200 ${
+                    active
+                      ? 'bg-[#0F2C59] dark:bg-[#2563EB] text-white'
+                      : 'text-[#0F172A]/80 dark:text-[#F8FAFC]/80 hover:bg-[#0F2C59]/05 dark:hover:bg-white/05'
+                  }`}
+                >
+                  <span className="flex items-center justify-between">
+                    {item.label}
+                    {active && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    )}
+                  </span>
+                </button>
+              );
+            })}
+
+            <div className="pt-3 border-t border-[#0F2C59]/08 dark:border-white/08 mt-2">
+              <a
+                href="#contact"
+                onClick={() => setMobileOpen(false)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl bg-[#0F2C59] dark:bg-[#2563EB] text-white text-sm font-bold shadow-lg transition-all duration-300 active:scale-95"
+              >
+                <span>Get in Touch</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              </a>
+            </div>
+          </nav>
+        </div>
+      </div>
     </>
   );
 };

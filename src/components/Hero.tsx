@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ArrowDown, ArrowRight, Award, ShieldCheck } from 'lucide-react';
 
 const WORDS = ['art and code.', 'design and data.', 'beauty and speed.', 'emotion and logic.'];
 
-const TypewriterWord: React.FC = () => {
+const TypewriterWord = () => {
   const [displayed, setDisplayed] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -45,7 +45,7 @@ const TypewriterWord: React.FC = () => {
   );
 };
 
-const StatCard: React.FC<{ value: string; label: string; delay?: number }> = ({ value, label, delay = 0 }) => (
+const StatCard = ({ value, label, delay = 0 }: { value: string; label: string; delay?: number }) => (
   <div className="reveal" data-delay={delay}>
     <div className="flex flex-col">
       <span className="font-monument text-2xl md:text-4xl font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight">{value}</span>
@@ -54,11 +54,11 @@ const StatCard: React.FC<{ value: string; label: string; delay?: number }> = ({ 
   </div>
 );
 
-export const Hero: React.FC = () => {
+export const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-[90vh] flex items-center pt-28 pb-20 overflow-hidden noise"
+      className="relative min-h-[90vh] flex items-center pt-20 md:pt-28 pb-20 overflow-hidden noise"
     >
       <div className="blob blob-blue absolute -top-32 -left-24 w-[600px] h-[600px] pulse-glow" />
       <div className="blob blob-navy absolute bottom-0 right-0 w-[500px] h-[500px] pulse-glow" style={{ animationDelay: '3s' }} />
@@ -67,14 +67,12 @@ export const Hero: React.FC = () => {
       <div className="relative z-10 max-w-5xl mx-auto w-full px-5 md:px-10">
         <div className="space-y-9">
           <div className="reveal" data-delay="0">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass border border-[#0F2C59]/10 dark:border-white/10 shadow-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="ticker-dot absolute inset-0 rounded-full bg-[#2563EB] opacity-80" />
-                <span className="relative rounded-full h-2 w-2 bg-[#2563EB]" />
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-bold tracking-wider uppercase shadow-sm">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
               </span>
-              <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#0F2C59] dark:text-[#60A5FA]">
-                code . design . inspire
-              </span>
+              Ready to work
             </div>
           </div>
 

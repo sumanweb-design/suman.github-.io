@@ -4,5 +4,26 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  build: {
+    target: 'esnext',
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'react';
+          }
+          if (id.includes('node_modules/gsap')) {
+            return 'gsap';
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'lucide';
+          }
+          if (id.includes('node_modules/canvas-confetti')) {
+            return 'confetti';
+          }
+        },
+      },
+    },
+  },
 })
-

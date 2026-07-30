@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ArrowUpRight, ExternalLink } from 'lucide-react';
 import { ProjectModal } from './ProjectModal';
 import type { ProjectData } from './ProjectModal';
@@ -296,7 +296,7 @@ function ProjectCard({ project, onOpen }: { project: ProjectData; onOpen: () => 
   );
 }
 
-export const SelectedProjects: React.FC = () => {
+export const SelectedProjects = () => {
   const [filter, setFilter] = useState('All');
   const [modal, setModal] = useState<ProjectData | null>(null);
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Cpu, Terminal, Zap, Flame, ChevronRight } from 'lucide-react';
 
 const categories = [
@@ -8,11 +8,11 @@ const categories = [
     icon: Terminal,
     color: '#2563EB',
     skills: [
-      { name: 'HTML5 & Semantic Markup', level: 'Expert', note: 'SEO structure · semantic accessibility · clean DOM hierarchy' },
+      { name: 'HTML5 & Semantic Markup', level: 'Advanced', note: 'SEO structure · semantic accessibility · clean DOM hierarchy' },
       { name: 'CSS3 & Modern Styling', level: 'Expert', note: 'Flexbox · CSS Grid · Custom Properties · Responsive Media Queries' },
-      { name: 'JavaScript (ES6+)', level: 'Advanced', note: 'Async/Await · DOM manipulation · Event loop · Modern Web APIs' },
+      { name: 'JavaScript (ES6+)', level: 'Expert', note: 'Async/Await · DOM manipulation · Event loop · Modern Web APIs' },
       { name: 'TypeScript', level: 'Proficient', note: 'Type safety · strict props interfaces · reusable generics' },
-      { name: 'React & Next.js', level: 'Advanced', note: 'Hooks · State Management · Reusable Components · SPA routing' },
+      { name: 'React & Next.js', level: 'Pro', note: 'Hooks · State Management · Reusable Components · SPA routing' },
     ],
   },
   {
@@ -22,7 +22,7 @@ const categories = [
     color: '#7C3AED',
     skills: [
       { name: 'Tailwind CSS', level: 'Expert', note: 'Utility-first design · dark mode · custom theme configuration' },
-      { name: 'Framer Motion & GSAP', level: 'Advanced', note: 'Interactive transitions · scroll-triggered micro-animations' },
+      { name: 'Framer Motion & GSAP', level: 'Proficient', note: 'Interactive transitions · scroll-triggered micro-animations' },
       { name: 'Component UI Libraries', level: 'Proficient', note: 'shadcn/ui · Radix UI · Lucide Icons · Headless UI' },
       { name: 'Responsive Web Design', level: 'Expert', note: 'Mobile-first layouts · fluid typography · cross-device testing' },
       { name: 'Canvas & SVG Graphics', level: 'Intermediate', note: 'Interactive HTML5 Canvas · vector animation · custom SVG icons' },
@@ -34,7 +34,7 @@ const categories = [
     icon: Cpu,
     color: '#059669',
     skills: [
-      { name: 'Vite & Modern Bundlers', level: 'Advanced', note: 'Fast HMR · bundle optimization · modern asset loading' },
+      { name: 'Vite & Modern Bundlers', level: 'Pro', note: 'Fast HMR · bundle optimization · modern asset loading' },
       { name: 'Core Web Vitals & Perf', level: 'Score: 99', note: 'Fast LCP · zero layout shift · optimized image & font assets' },
       { name: 'Accessibility (WCAG)', level: 'Proficient', note: 'Keyboard navigation · ARIA labels · contrast compliance' },
       { name: 'Git & Version Control', level: 'Proficient', note: 'Git workflow · branching strategies · GitHub pull requests' },
@@ -43,7 +43,7 @@ const categories = [
   },
 ];
 
-export const InteractiveSkills: React.FC = () => {
+export const InteractiveSkills = () => {
   const [activeId, setActiveId] = useState('frontend');
   const [hovered, setHovered] = useState<string | null>(null);
 
@@ -76,16 +76,14 @@ export const InteractiveSkills: React.FC = () => {
                   key={cat.id}
                   type="button"
                   onClick={() => setActiveId(cat.id)}
-                  className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 cursor-pointer group ${
-                    active
-                      ? 'bg-[#0F2C59] dark:bg-[#2563EB] border-[#0F2C59] dark:border-[#2563EB] shadow-xl text-white translate-x-1'
-                      : 'bg-white/80 dark:bg-[#1E293B]/80 border-[#0F2C59]/10 dark:border-white/10 text-[#0F172A] dark:text-white hover:bg-white dark:hover:bg-[#1E293B] hover:border-[#2563EB]/40 hover:translate-x-0.5 shadow-xs'
-                  }`}
+                  className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 cursor-pointer group ${active
+                    ? 'bg-[#0F2C59] dark:bg-[#2563EB] border-[#0F2C59] dark:border-[#2563EB] shadow-xl text-white translate-x-1'
+                    : 'bg-white/80 dark:bg-[#1E293B]/80 border-[#0F2C59]/10 dark:border-white/10 text-[#0F172A] dark:text-white hover:bg-white dark:hover:bg-[#1E293B] hover:border-[#2563EB]/40 hover:translate-x-0.5 shadow-xs'
+                    }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-                      active ? 'bg-[#2563EB] dark:bg-[#0F172A] text-white' : 'bg-[#0F2C59]/08 dark:bg-white/10 text-[#2563EB] dark:text-[#60A5FA]'
-                    }`}>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${active ? 'bg-[#2563EB] dark:bg-[#0F172A] text-white' : 'bg-[#0F2C59]/08 dark:bg-white/10 text-[#2563EB] dark:text-[#60A5FA]'
+                      }`}>
                       <Icon className="w-5 h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -94,9 +92,8 @@ export const InteractiveSkills: React.FC = () => {
                         {cat.skills.length} capabilities
                       </p>
                     </div>
-                    <ChevronRight className={`w-4 h-4 shrink-0 transition-transform duration-300 ${
-                      active ? 'rotate-0 text-white' : '-rotate-90 opacity-40 group-hover:opacity-100'
-                    }`} />
+                    <ChevronRight className={`w-4 h-4 shrink-0 transition-transform duration-300 ${active ? 'rotate-0 text-white' : '-rotate-90 opacity-40 group-hover:opacity-100'
+                      }`} />
                   </div>
                 </button>
               );
@@ -128,9 +125,8 @@ export const InteractiveSkills: React.FC = () => {
                       {skill.name}
                     </h4>
                   </div>
-                  <div className={`w-2 h-2 rounded-full mt-2 shrink-0 transition-colors duration-300 ${
-                    hovered === skill.name ? 'bg-[#2563EB]' : 'bg-[#0F2C59]/20 dark:bg-white/20'
-                  }`} />
+                  <div className={`w-2 h-2 rounded-full mt-2 shrink-0 transition-colors duration-300 ${hovered === skill.name ? 'bg-[#2563EB]' : 'bg-[#0F2C59]/20 dark:bg-white/20'
+                    }`} />
                 </div>
 
                 <p className="text-xs font-mono text-[#0F172A]/65 dark:text-[#F8FAFC]/65 leading-relaxed">
